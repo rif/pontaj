@@ -23,5 +23,6 @@ response.meta.copyright = 'Copyright 2011'
 response.menu = [
     (T('Pontaj'), False, URL(request.application,'default','index'), []),
     (T('Angajati'), False, URL('angajati'), []),
-    (T('Firme'), False, URL('firme'), [])
+    (T('Firme'), False, URL('firme'), []),
+    (T('Tipuri de concediu'), False, URL('tip_concediu'), [])
     ]

@@ -1,0 +1,11 @@
+{{extend 'layout.html'}}
+
+<h1>Tipuri de concediu</h1>
+
+{{=form}}
+
+<ol>
+  {{for tc in tcs:}}
+  <li><a href="{{=URL('tip_concediu', args=tc.id)}}">{{=tc.abreviere + " - " + tc.nume}}</a></li>
+  {{pass}}
+</ol>

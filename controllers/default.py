@@ -80,6 +80,15 @@ def firme():
                            next=URL(), message="Firma actualizata")
     return dict(firme=firme, form=form)
 
+def tip_concediu():
+    tcs = db().select(db.tip_concediu.ALL, orderby=db.tip_concediu.nume)
+    if len(request.args) == 0:
+        form = crud.create(db.tip_concediu,
+                           next=URL(), message="Tip concediu introdus")
+    else:
+        form = crud.update(db.tip_concediu, request.args[0], deletable=False, 
+                           next=URL(), message="Tip concediu actualizat")
+    return dict(tcs=tcs, form=form)
 
 def urmatoarea_firma():
     session.firma_id = (session.firma_id or 0) + 1
@@ -115,6 +124,14 @@ def concediaza():
     pontaj.update_record(concedii=lista_concedii)
     return pontaj.concedii[index]
     
+def get_ore_lucrate():
+    pontaj = db.pontaj(request.args[0])
+    return pontaj.total_ore_lucrate
+
+def get_ore_nelucrate():
+    pontaj = db.pontaj(request.args[0])
+    return pontaj.total_ore_nelucrate
+
 
 def user():
     """

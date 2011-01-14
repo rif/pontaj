@@ -13,10 +13,11 @@
   );
   $(".pontator, .concediator").click(function(e){
   $(this).load($(this).attr("href"));
+  orel = $(".total-lucrate", $(this).parent().parent());
+  oren = $(".total-nelucrate", $(this).parent().parent());
+  orel.load(orel.attr("id"));
+  oren.load(oren.attr("id"));
   e.preventDefault();
-  });
-  $(".pontator, .concediator").scroll(function(e){
-  console.log("scrolling");
   });
   });
 </script>
@@ -69,8 +70,8 @@
   <td class="{{if zi[1] in (5,6):}}weekend{{pass}}"><a class="pontator" href="{{=URL('ponteaza', args=(pontaj.id, index))}}">{{=pontaj.zile[index]}}</a></td>
   {{pass}}
   {{pass}}
-  <td>{{=pontaj.total_ore_lucrate}}</td>
-  <td>{{=pontaj.total_ore_nelucrate}}</td>
+  <td id="{{=URL('get_ore_lucrate', args=pontaj.id)}}" class="total-lucrate">{{=pontaj.total_ore_lucrate}}</td>
+  <td id="{{=URL('get_ore_nelucrate', args=pontaj.id)}}" class="total-nelucrate">{{=pontaj.total_ore_nelucrate}}</td>
   {{for cc, co in enumerate(pontaj.concedii):}}
   <td><a class="concediator" href="{{=URL('concediaza', args=(pontaj.id, cc))}}">{{=co}}</a></td>
   {{pass}}
