@@ -74,4 +74,26 @@ crud.settings.auth = None                      # =auth to enforce authorization 
 ## >>> db.mytable.insert(myfield='value')
 ## >>> rows=db(db.mytable.myfield=='value').select(db.mytable.ALL)
 ## >>> for row in rows: print row.id, row.myfield
-#########################################################################
+#########################################################################.
+db.define_table('angajat',
+                Field('nume'),
+                Field('prenume'),
+                Field('norma', 'integer', requires=[IS_INT_IN_RANGE(1,10)]),
+                format='%(nume)s %(prenume)s'
+                )
+
+db.define_table('pontaj',
+                Field('angajat', db.angajat),
+                Field('luna', 'date'),
+                Field('zile', 'list:integer'),
+                Field('concedii', 'list:integer')
+                )
+
+db.define_table('tip_concediu',
+                Field('abreviere'),
+                Field('nume')
+                )
+
+db.define_table('firma',
+                Field('nume')
+                )

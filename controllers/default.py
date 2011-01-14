@@ -8,14 +8,21 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 ## - call exposes all registered services (none by default)
 #########################################################################
-
+import datetime
 def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
-    """
-    response.flash = T('You are successfully running web2py.')
-    return dict(message=T('Hello World'))
+    today = datetime.date.today()
+    if len(request.args) > 0:
+        an = request.args[0]
+    else:
+        an = today.year
+    if len(request.args) > 1:
+        luna = request.args[1]
+    else:
+        luna = today.month
+    tc = db(db.tip_concediu.id>0)
+    angajati = db(db.angajat.id>0).select()
+    tipuri_concediu =db(db.tip_concediu.id>0).select() 
+    return dict(angajati=angajati, tipuri_concediu=tipuri_concediu, an=an, luna=luna, tc=tc)
 
 def user():
     """

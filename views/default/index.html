@@ -1,33 +1,42 @@
-{{left_sidebar_enabled=right_sidebar_enabled=False}}
 {{extend 'layout.html'}}
 
-{{if 'message' in globals():}}
+<div id="legenda" style="float:right;">
+  <ul>
+    {{for t in tc.select():}}
+    <li>{{=t.abreviere}} - {{=t.nume}}</li>
+    {{pass}}
+  </ul>
+</div>
 
-<h1>{{=message}}</h1>
-
-<hr />
-<h2>Readme</h2>
-<ul>
-  <li>{{=T('You are successfully running web2py')}}</li>
-  <li>{{=T('This is a copy of the scaffolding application')}}</li>
-  <li>{{=T('You can modify this application and adapt it to your needs')}}</li>
-  <li>{{=A(B(T("click here for the administrative interface")), _href=URL('admin','default','index'))}}</li>
-  <li>{{=A(T("click here for online examples"), _href=URL('examples','default','index'))}}</li>
-  <li><a href="http://web2py.com">web2py.com</a></li>
-  <li><a href="http://web2py.com/book">{{=T('documentation')}}</a></li>
-</ul>
-
-<ol>
-  <li>{{=T('You visited the url')}} {{=A(request.env.path_info,_href=request.env.path_info)}}</li>
-  <li>{{=T('Which called the function')}} {{=A(request.function+'()',_href='#')}} {{=T('located in the file')}}
-    {{=A('web2py/applications/%(application)s/controllers/%(controller)s.py'%request,_href=URL('admin','default','peek',args=(request.application,'controllers',request.controller+'.py')))}}</li>
-  <li>{{=T('The output of the file is a dictionary that was rendered by the view')}}
-    {{=A('web2py/applications/%(application)s/views/%(controller)s/index.html'%request,_href=URL('admin','default','peek',args=(request.application,'views',request.controller,'index.html')))}}</li>
-</ol>
-
-{{else:}}
-{{=BEAUTIFY(response._vars)}}
+<h1 style="text-align:center;">Foaie colectivă de prezență</h1>
+<h3>Unitatea {{=db.firma(1).nume}}</h3>
+<h4 style="text-align:center;">pe luna {{=luna}} {{=an}}</h4>
+<table>
+<thead>
+<tr>
+  <th rowspan="2">Nr. crt</th>
+  <th rowspan="2">Angajat</th>
+  <th colspan="31">Ore zilnic</th>
+  <th colspan="{{=tc.count()}}">Concedii</th>
+</tr>
+<tr>
+  <th></th>
+  {{for i in range(1,32):}}
+  <th>{{=i}}</th>
+  {{pass}}
+  {{for tc in tipuri_concediu:}}
+  <th>{{=tc.abreviere}}</th>
+  {{pass}}
+</tr>
+</thead>
+<tbody>
+{{for ord, angajat in enumerate(angajati):}}
+<tr>
+  <td>{{=ord}}</td>
+  <td>{{=angajat.nume}} {{=angajat.prenume}}</td>
+  <td>...</td>
+  <td>...</td>
+</tr>
 {{pass}}
-
-{{block left_sidebar}}New Left Sidebar Content{{end}}
-{{block right_sidebar}}New Right Sidebar Content{{end}}
+</tbody>
+</table>
