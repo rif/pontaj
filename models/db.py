@@ -75,7 +75,12 @@ crud.settings.auth = None                      # =auth to enforce authorization 
 ## >>> rows=db(db.mytable.myfield=='value').select(db.mytable.ALL)
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################.
+db.define_table('firma',
+                Field('nume')
+                )
+
 db.define_table('angajat',
+                Field('firma', db.firma, requires=[IS_IN_DB(db, 'firma.id', '%(nume)s')]),
                 Field('nume'),
                 Field('prenume'),
                 Field('norma', 'integer', requires=[IS_INT_IN_RANGE(1,10)]),
@@ -87,14 +92,11 @@ db.define_table('pontaj',
                 Field('angajat', db.angajat),
                 Field('luna', 'date'),
                 Field('zile', 'list:integer'),
-                Field('concedii', 'list:integer')
+                Field('concedii', 'list:integer'),
+                Field('nr_zile_lucaratoare', writable=False, readable=False)
                 )
 
 db.define_table('tip_concediu',
                 Field('abreviere'),
-                Field('nume')
-                )
-
-db.define_table('firma',
                 Field('nume')
                 )

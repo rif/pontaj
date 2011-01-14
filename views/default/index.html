@@ -5,16 +5,12 @@
   $(function(){
   $("#pontaj-table>tbody>tr").hover(
   function () {
-      $(this).css("border", "1px dotted red");
+      $(this).addClass("overit");
   }, 
   function () {
-      $(this).css("border", "none");
+      $(this).removeClass("overit");
   }
   );
-  $("#urmatoarea-firma").click(function(e){
-  $(this).load($(this).attr("href"));
-  e.preventDefault();
-  });
   });
 </script>
 {{end}}
@@ -64,8 +60,8 @@
   <td class="{{if zi[1] in (5,6):}}weekend{{pass}}"><a href="{{=URL('ponteaza', args=(index))}}">{{=pontaj.zile[index]}}</a></td>
   {{pass}}
   {{pass}}
-  {{for co in pontaj.concedii:}}
-  <td>{{=co}}</td>
+  {{for cc, co in enumerate(pontaj.concedii):}}
+  <td><a href="{{=URL('concediaza', args=(cc+1))}}">{{=co}}</a></td>
   {{pass}}
 </tr>
 {{pass}}

@@ -9,6 +9,7 @@
     <tr>
       <th>Nr. crt.</th>
       <th>Nume și Prenume</th>
+      <th>Firma</th>
       <th>Norma</th>
       <th>Activ</th>
     </tr>
@@ -18,6 +19,7 @@
     <tr>
       <td>{{=ord+1}}</td>
       <td><a href="{{=URL('angajati', args=a.id)}}">{{=a.nume}} {{=a.prenume}}</a></td>
+      <td><a href="{{=URL('firme', args=a.firma.id)}}">{{=a.firma}}</a></td>
       <td>{{=a.norma}}</td>
       <td>{{=a.activ}}</td>
     </tr>

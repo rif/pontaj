@@ -29,7 +29,7 @@ def index():
     intai = date(an, luna, 1)
 
     tcs = db(db.tip_concediu.id>0)
-    angajati = db(db.angajat.activ==True).select(orderby=db.angajat.nume|db.angajat.prenume)
+    angajati = db((db.angajat.activ==True)&(db.angajat.firma==session.firma_id)).select(orderby=db.angajat.nume|db.angajat.prenume)
     session.firma_id = (session.firma_id or 1)
     firma = db.firma(session.firma_id)
     c = calendar.Calendar()
@@ -82,8 +82,7 @@ def urmatoarea_firma():
     session.firma_id = (session.firma_id or 0) + 1
     if session.firma_id > db(db.firma.id>0).count():
         session.firma_id = 1
-    firma = db.firma(session.firma_id)
-    return firma.nume
+    return redirect(URL('index'))
     
 
 def user():
