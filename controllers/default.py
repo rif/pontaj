@@ -37,14 +37,17 @@ def index():
         if not db.pontaj((db.pontaj.angajat==a) &
                          (db.pontaj.luna==intai)):
             pontaje = []
+            zile_lucratoare = 0
             for zi in c.itermonthdays2(an, luna):
                 if zi[0] == 0: continue # skip start and end 0s
                 if zi[1] in (5,6): # if weekend
                     pontaje.append(0)
                 else:
                     pontaje.append(a.norma)
+                    zile_lucratoare += 1
             db.pontaj.insert(angajat=a, luna=intai,
-                             zile=pontaje, concedii=[0]* tcs.count())
+                             zile=pontaje, concedii=[0]* tcs.count(),
+                             nr_zile_lucratoare=zile_lucratoare)
             db.commit() 
 
     return dict(angajati=angajati,
@@ -83,6 +86,34 @@ def urmatoarea_firma():
     if session.firma_id > db(db.firma.id>0).count():
         session.firma_id = 1
     return redirect(URL('index'))
+    
+def ponteaza():
+    if len(request.args) != 2:
+        response.flash("Se pare ca avem o eroare: anuntati creatorul aplicatiei!")
+        redirect(URL('index'))
+    pontaj = db.pontaj(request.args[0])
+    index = int(request.args[1])
+    lista_zile = pontaj.zile
+    if pontaj.zile[index] > 0:
+        lista_zile[index] -= 1
+    else:
+        lista_zile[index] = 12
+    pontaj.update_record(zile=lista_zile)
+    return pontaj.zile[index]
+    
+def concediaza():
+    if len(request.args) != 2:
+        response.flash("Se pare ca avem o eroare: anuntati creatorul aplicatiei!")
+        redirect(URL('index'))
+    pontaj = db.pontaj(request.args[0])
+    index = int(request.args[1])
+    lista_concedii = pontaj.concedii
+    if pontaj.concedii[index] < pontaj.total_ore_nelucrate:
+        lista_concedii[index] += 1
+    else:
+        lista_concedii[index] = 0
+    pontaj.update_record(concedii=lista_concedii)
+    return pontaj.concedii[index]
     
 
 def user():

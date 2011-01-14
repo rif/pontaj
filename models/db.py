@@ -75,6 +75,17 @@ crud.settings.auth = None                      # =auth to enforce authorization 
 ## >>> rows=db(db.mytable.myfield=='value').select(db.mytable.ALL)
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################.
+
+def calcul_ore_lucrate(row):
+    sum = 0
+    for ore in row.zile:
+        sum += ore
+    return sum
+
+class PontajVirtualFields:
+    def total_ore_nelucrate(self):
+        return int(self.pontaj.nr_zile_lucratoare) * int(self.pontaj.angajat.norma) - int(self.pontaj.total_ore_lucrate)
+
 db.define_table('firma',
                 Field('nume')
                 )
@@ -93,10 +104,13 @@ db.define_table('pontaj',
                 Field('luna', 'date'),
                 Field('zile', 'list:integer'),
                 Field('concedii', 'list:integer'),
-                Field('nr_zile_lucaratoare', writable=False, readable=False)
+                Field('nr_zile_lucratoare', 'integer', writable=False, readable=False),
+                Field('total_ore_lucrate', 'integer', compute=calcul_ore_lucrate),
                 )
 
 db.define_table('tip_concediu',
                 Field('abreviere'),
                 Field('nume')
                 )
+
+db.pontaj.virtualfields.append(PontajVirtualFields())

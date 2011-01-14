@@ -11,6 +11,13 @@
       $(this).removeClass("overit");
   }
   );
+  $(".pontator, .concediator").click(function(e){
+  $(this).load($(this).attr("href"));
+  e.preventDefault();
+  });
+  $(".pontator, .concediator").scroll(function(e){
+  console.log("scrolling");
+  });
   });
 </script>
 {{end}}
@@ -35,6 +42,8 @@
   <th rowspan="2">Nr. crt</th>
   <th rowspan="2">Angajat</th>
   <th colspan="{{=calendar.monthrange(an,luna)[1]}}">Ore zilnic</th>
+  <th rowspan="2">Lucrate</th>
+  <th rowspan="2">Nelucrate</th>
   <th colspan="{{=tcs.count()}}">Concedii</th>
 </tr>
 <tr>
@@ -57,11 +66,13 @@
   {{for zi in c.itermonthdays2(an, luna):}}
   {{if zi[0] != 0:}}
   {{index = zi[0] - 1}}
-  <td class="{{if zi[1] in (5,6):}}weekend{{pass}}"><a href="{{=URL('ponteaza', args=(index))}}">{{=pontaj.zile[index]}}</a></td>
+  <td class="{{if zi[1] in (5,6):}}weekend{{pass}}"><a class="pontator" href="{{=URL('ponteaza', args=(pontaj.id, index))}}">{{=pontaj.zile[index]}}</a></td>
   {{pass}}
   {{pass}}
+  <td>{{=pontaj.total_ore_lucrate}}</td>
+  <td>{{=pontaj.total_ore_nelucrate}}</td>
   {{for cc, co in enumerate(pontaj.concedii):}}
-  <td><a href="{{=URL('concediaza', args=(cc+1))}}">{{=co}}</a></td>
+  <td><a class="concediator" href="{{=URL('concediaza', args=(pontaj.id, cc))}}">{{=co}}</a></td>
   {{pass}}
 </tr>
 {{pass}}
