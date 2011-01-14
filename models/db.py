@@ -79,6 +79,7 @@ db.define_table('angajat',
                 Field('nume'),
                 Field('prenume'),
                 Field('norma', 'integer', requires=[IS_INT_IN_RANGE(1,10)]),
+                Field('activ', 'boolean', default=True),
                 format='%(nume)s %(prenume)s'
                 )
 

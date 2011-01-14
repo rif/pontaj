@@ -1,0 +1,26 @@
+{{extend 'layout.html'}}
+
+<h1>Angajati</h1>
+
+{{=form}}
+
+<table>
+  <thead>
+    <tr>
+      <th>Nr. crt.</th>
+      <th>Nume și Prenume</th>
+      <th>Norma</th>
+      <th>Activ</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{for ord,a in enumerate(angajati):}}
+    <tr>
+      <td>{{=ord+1}}</td>
+      <td><a href="{{=URL('angajati', args=a.id)}}">{{=a.nume}} {{=a.prenume}}</a></td>
+      <td>{{=a.norma}}</td>
+      <td>{{=a.activ}}</td>
+    </tr>
+    {{pass}}
+  </tbody>
+</table>

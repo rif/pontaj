@@ -2,8 +2,8 @@
 
 <div id="legenda" style="float:right;">
   <ul>
-    {{for t in tc.select():}}
-    <li>{{=t.abreviere}} - {{=t.nume}}</li>
+    {{for tc in tcs.select():}}
+    <li>{{=tc.abreviere}} - {{=tc.nume}}</li>
     {{pass}}
   </ul>
 </div>
@@ -17,14 +17,13 @@
   <th rowspan="2">Nr. crt</th>
   <th rowspan="2">Angajat</th>
   <th colspan="31">Ore zilnic</th>
-  <th colspan="{{=tc.count()}}">Concedii</th>
+  <th colspan="{{=tcs.count()}}">Concedii</th>
 </tr>
 <tr>
-  <th></th>
   {{for i in range(1,32):}}
   <th>{{=i}}</th>
   {{pass}}
-  {{for tc in tipuri_concediu:}}
+  {{for tc in tcs.select():}}
   <th>{{=tc.abreviere}}</th>
   {{pass}}
 </tr>
@@ -32,10 +31,15 @@
 <tbody>
 {{for ord, angajat in enumerate(angajati):}}
 <tr>
-  <td>{{=ord}}</td>
+  <td>{{=ord + 1}}</td>
   <td>{{=angajat.nume}} {{=angajat.prenume}}</td>
-  <td>...</td>
-  <td>...</td>
+  {{pontaj = db.pontaj((db.pontaj.angajat==angajat) & (db.pontaj.luna==intai))}}
+  {{for zi in pontaj.zile:}}
+  <td>{{=zi}}</td>
+  {{pass}}
+  {{for co in pontaj.concedii:}}
+  <td>{{=co}}</td>
+  {{pass}}
 </tr>
 {{pass}}
 </tbody>

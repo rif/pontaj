@@ -8,21 +8,41 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 ## - call exposes all registered services (none by default)
 #########################################################################
-import datetime
+from datetime import date
+
 def index():
-    today = datetime.date.today()
-    if len(request.args) > 0:
-        an = request.args[0]
+    today = date.today()
+    intai = date(today.year, today.month, 1)
+
+    if len(request.args) > 0: an = request.args[0]
+    else: an = today.year
+    if len(request.args) > 1: luna = request.args[1]
+    else: luna = today.month
+
+    tcs = db(db.tip_concediu.id>0)
+    angajati = db(db.angajat.activ==True).select(orderby=db.angajat.nume|db.angajat.prenume)
+    for a in angajati:
+        if not db.pontaj((db.pontaj.angajat==a) &
+                         (db.pontaj.luna==intai)):
+            db.pontaj.insert(angajat=a, luna=intai,
+                             zile=[a.norma] * 31, concedii=[0]* tcs.count())
+            db.commit() 
+
+    return dict(angajati=angajati,
+                an=an,
+                luna=luna,
+                tcs=tcs, intai=intai)
+
+def angajati():
+    angajati = db().select(db.angajat.ALL,
+                           orderby=db.angajat.nume|db.angajat.prenume)
+    if len(request.args) == 0:
+        form = crud.create(db.angajat,
+                           next=URL(), message="Angajat introdus")
     else:
-        an = today.year
-    if len(request.args) > 1:
-        luna = request.args[1]
-    else:
-        luna = today.month
-    tc = db(db.tip_concediu.id>0)
-    angajati = db(db.angajat.id>0).select()
-    tipuri_concediu =db(db.tip_concediu.id>0).select() 
-    return dict(angajati=angajati, tipuri_concediu=tipuri_concediu, an=an, luna=luna, tc=tc)
+        form = crud.update(db.angajat, request.args[0], deletable=False, 
+                           next=URL(), message="Angajat actualizat")
+    return dict(angajati=angajati, form=form)
 
 def user():
     """
