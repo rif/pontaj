@@ -8,30 +8,53 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 ## - call exposes all registered services (none by default)
 #########################################################################
-from datetime import date
+from datetime import date, timedelta
+import calendar
+
+def _prev_month(intai):
+    pe = intai - timedelta(days=1)
+    return date(pe.year, pe.month, 1)
+
+def _next_month(intai):
+    ultima = calendar.monthrange(intai.year, intai.month)[1]
+    u = date(intai.year, intai.month, ultima)
+    return u + timedelta(days=1)
 
 def index():
     today = date.today()
-    intai = date(today.year, today.month, 1)
-
-    if len(request.args) > 0: an = request.args[0]
+    if len(request.args) > 0: an = int(request.args[0])
     else: an = today.year
-    if len(request.args) > 1: luna = request.args[1]
+    if len(request.args) > 1: luna = int(request.args[1])
     else: luna = today.month
+    intai = date(an, luna, 1)
 
     tcs = db(db.tip_concediu.id>0)
     angajati = db(db.angajat.activ==True).select(orderby=db.angajat.nume|db.angajat.prenume)
+    session.firma_id = (session.firma_id or 1)
+    firma = db.firma(session.firma_id)
+    c = calendar.Calendar()
     for a in angajati:
         if not db.pontaj((db.pontaj.angajat==a) &
                          (db.pontaj.luna==intai)):
+            pontaje = []
+            for zi in c.itermonthdays2(an, luna):
+                if zi[0] == 0: continue # skip start and end 0s
+                if zi[1] in (5,6): # if weekend
+                    pontaje.append(0)
+                else:
+                    pontaje.append(a.norma)
             db.pontaj.insert(angajat=a, luna=intai,
-                             zile=[a.norma] * 31, concedii=[0]* tcs.count())
+                             zile=pontaje, concedii=[0]* tcs.count())
             db.commit() 
 
     return dict(angajati=angajati,
                 an=an,
                 luna=luna,
-                tcs=tcs, intai=intai)
+                tcs=tcs,
+                intai=intai,
+                firma=firma,
+                inapoi=_prev_month(intai),
+                inainte=_next_month(intai))
 
 def angajati():
     angajati = db().select(db.angajat.ALL,
@@ -43,6 +66,25 @@ def angajati():
         form = crud.update(db.angajat, request.args[0], deletable=False, 
                            next=URL(), message="Angajat actualizat")
     return dict(angajati=angajati, form=form)
+
+def firme():
+    firme = db().select(db.firma.ALL, orderby=db.firma.nume)
+    if len(request.args) == 0:
+        form = crud.create(db.firma,
+                           next=URL(), message="Firma introdusa")
+    else:
+        form = crud.update(db.firma, request.args[0], deletable=False, 
+                           next=URL(), message="Firma actualizata")
+    return dict(firme=firme, form=form)
+
+
+def urmatoarea_firma():
+    session.firma_id = (session.firma_id or 0) + 1
+    if session.firma_id > db(db.firma.id>0).count():
+        session.firma_id = 1
+    firma = db.firma(session.firma_id)
+    return firma.nume
+    
 
 def user():
     """

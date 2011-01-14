@@ -5,14 +5,14 @@
 #########################################################################
 
 response.title = request.application
-response.subtitle = T('customize me!')
+response.subtitle = T('Pontajul angazatilor')
 
 #http://dev.w3.org/html5/markup/meta.name.html
-response.meta.author = 'you'
-response.meta.description = 'Free and open source full-stack enterprise framework for agile development of fast, scalable, secure and portable database-driven web-based applications. Written and programmable in Python'
-response.meta.keywords = 'web2py, python, framework'
+response.meta.author = 'Radu Fericean'
+response.meta.description = 'Aplicatie pentru pontarea angazilor intr-o firma din Romania'
+response.meta.keywords = 'pontaj, pontare, ore, timp, lucru, firma'
 response.meta.generator = 'Web2py Enterprise Framework'
-response.meta.copyright = 'Copyright 2007-2010'
+response.meta.copyright = 'Copyright 2011'
 
 
 ##########################################
@@ -22,5 +22,6 @@ response.meta.copyright = 'Copyright 2007-2010'
 
 response.menu = [
     (T('Pontaj'), False, URL(request.application,'default','index'), []),
-    (T('Angajati'), False, URL('angajati'), [])
+    (T('Angajati'), False, URL('angajati'), []),
+    (T('Firme'), False, URL('firme'), [])
     ]

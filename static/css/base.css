@@ -409,8 +409,9 @@ div.error {
  *  HERE YOU CAN START TO WRITE YOUR OWN DIVS
  */
 
-
-
+th.weekend,td.weekend>a {color: lightgray;}
+a, a:active, a:visited {text-decoration: none;}
+#legenda {float:right;}
 /*
  * Media queries for responsive design
  */

@@ -1,6 +1,24 @@
 {{extend 'layout.html'}}
 
-<div id="legenda" style="float:right;">
+{{block script}}
+<script type="text/javascript">
+  $(function(){
+  $("#pontaj-table>tbody>tr").hover(
+  function () {
+      $(this).css("border", "1px dotted red");
+  }, 
+  function () {
+      $(this).css("border", "none");
+  }
+  );
+  $("#urmatoarea-firma").click(function(e){
+  $(this).load($(this).attr("href"));
+  e.preventDefault();
+  });
+  });
+</script>
+{{end}}
+<div id="legenda">
   <ul>
     {{for tc in tcs.select():}}
     <li>{{=tc.abreviere}} - {{=tc.nume}}</li>
@@ -9,19 +27,25 @@
 </div>
 
 <h1 style="text-align:center;">Foaie colectivă de prezență</h1>
-<h3>Unitatea {{=db.firma(1).nume}}</h3>
-<h4 style="text-align:center;">pe luna {{=luna}} {{=an}}</h4>
-<table>
+<h3>Unitatea <a id="urmatoarea-firma" href="{{=URL('urmatoarea_firma')}}">{{=firma.nume}}</a></h3>
+<h4 style="text-align:center;">
+  <a href="{{=URL('index', args=(inapoi.year, inapoi.month))}}">&lt;&lt;</a> pe luna {{=luna}} {{=an}} <a href="{{=URL('index', args=(inainte.year, inainte.month))}}">&gt;&gt;</a>
+</h4>
+{{import calendar}}
+{{c = calendar.Calendar()}}
+<table id="pontaj-table">
 <thead>
 <tr>
   <th rowspan="2">Nr. crt</th>
   <th rowspan="2">Angajat</th>
-  <th colspan="31">Ore zilnic</th>
+  <th colspan="{{=calendar.monthrange(an,luna)[1]}}">Ore zilnic</th>
   <th colspan="{{=tcs.count()}}">Concedii</th>
 </tr>
 <tr>
-  {{for i in range(1,32):}}
-  <th>{{=i}}</th>
+  {{for zi in c.itermonthdays2(an, luna):}}
+  {{if zi[0] != 0:}}
+  <th class="{{if zi[1] in (5,6):}}weekend{{pass}}">{{=zi[0]}}</th>
+  {{pass}}
   {{pass}}
   {{for tc in tcs.select():}}
   <th>{{=tc.abreviere}}</th>
@@ -34,8 +58,11 @@
   <td>{{=ord + 1}}</td>
   <td>{{=angajat.nume}} {{=angajat.prenume}}</td>
   {{pontaj = db.pontaj((db.pontaj.angajat==angajat) & (db.pontaj.luna==intai))}}
-  {{for zi in pontaj.zile:}}
-  <td>{{=zi}}</td>
+  {{for zi in c.itermonthdays2(an, luna):}}
+  {{if zi[0] != 0:}}
+  {{index = zi[0] - 1}}
+  <td class="{{if zi[1] in (5,6):}}weekend{{pass}}"><a href="{{=URL('ponteaza', args=(index))}}">{{=pontaj.zile[index]}}</a></td>
+  {{pass}}
   {{pass}}
   {{for co in pontaj.concedii:}}
   <td>{{=co}}</td>

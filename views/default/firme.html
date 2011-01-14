@@ -1,0 +1,11 @@
+{{extend 'layout.html'}}
+
+<h1>Firme</h1>
+
+{{=form}}
+
+<ol>
+{{for f in firme:}}
+<li>{{=f.nume}}</li>
+{{pass}}
+</ol>
