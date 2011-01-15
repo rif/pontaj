@@ -268,9 +268,9 @@ label {
 label, b, th {
     font-weight: bold;
 }
-thead th, tbody td {
+thead th {
     text-align: center;
-    border: 1px solid #D8D7D1;
+    border-bottom: 1px solid #D8D7D1;
 }
 
 /*********** forms and table padding ***********/
@@ -420,7 +420,12 @@ a, a:active, a:visited {text-decoration: none;}
 
 #page-links {text-align: center;}
 
-thead {border-bottom: 2px solid #444;}
+#pontaj-table thead {border-bottom: 2px solid #444;}
+
+#pontaj-table thead th, #pontaj-table tbody td {
+    text-align: center;
+    border: 1px solid #D8D7D1;
+}
 
 /*
  * Media queries for responsive design
