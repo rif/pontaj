@@ -273,10 +273,6 @@ thead th, tbody td {
     border: 1px solid #D8D7D1;
 }
 
-thead {
-    border-bottom: 2px solid #444;
-}
-
 /*********** forms and table padding ***********/
 form, table {
    padding: 5px 10px 5px 10px;
@@ -415,10 +411,16 @@ div.error {
  */
 
 th.weekend,td.weekend>a {color: lightgray;}
+
 a, a:active, a:visited {text-decoration: none;}
+
 #legenda {float:right;}
+
 .overit {background: #ffe5e5; border-bottom: 1px dotted red;}
+
 #page-links {text-align: center;}
+
+thead {border-bottom: 2px solid #444;}
 
 /*
  * Media queries for responsive design
