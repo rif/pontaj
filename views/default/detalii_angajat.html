@@ -1,0 +1,15 @@
+{{extend 'layout.html'}}
+
+<h1>{{=angajat.nume + ' ' + angajat.prenume}}</h1>
+
+<ul>
+  <li><label>Firma:</label> {{=angajat.firma.nume}}</li>
+  <li><label>Norma:</label> {{=angajat.norma}} ore</li>
+  <li><label>Concedii luate pe anul curent:</label></li>
+  <ul>
+    {{for ord, c in enumerate(concedii):}}
+    <li><label>{{=c.nume}}:</label>{{=sume[ord]}}</li>
+    {{pass}}
+  </ul>
+</ul>
+

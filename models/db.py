@@ -84,17 +84,17 @@ def calcul_ore_lucrate(row):
 
 class PontajVirtualFields:
     def total_ore_nelucrate(self):
-        return int(self.pontaj.nr_zile_lucratoare) * int(self.pontaj.angajat.norma) - int(self.pontaj.total_ore_lucrate)
+        return self.pontaj.nr_zile_lucratoare * self.pontaj.angajat.norma - self.pontaj.total_ore_lucrate
 
 db.define_table('firma',
-                Field('nume')
+                Field('nume', required=True, unique=True)
                 )
 
 db.define_table('angajat',
                 Field('firma', db.firma, requires=[IS_IN_DB(db, 'firma.id', '%(nume)s')]),
-                Field('nume'),
-                Field('prenume'),
-                Field('norma', 'integer', requires=[IS_INT_IN_RANGE(1,10)]),
+                Field('nume', required=True, unique=True),
+                Field('prenume', required=True, unique=True),
+                Field('norma', 'integer', required=True, requires=[IS_INT_IN_RANGE(1,10)]),
                 Field('activ', 'boolean', default=True),
                 format='%(nume)s %(prenume)s'
                 )
@@ -109,8 +109,8 @@ db.define_table('pontaj',
                 )
 
 db.define_table('tip_concediu',
-                Field('abreviere'),
-                Field('nume')
+                Field('abreviere', required=True, unique=True),
+                Field('nume', required=True, unique=True)
                 )
 
 db.pontaj.virtualfields.append(PontajVirtualFields())

@@ -427,6 +427,9 @@ a, a:active, a:visited {text-decoration: none;}
     border: 1px solid #D8D7D1;
 }
 
+#calendar {float: right;}
+#toggle-calendar {text-align: right;}
+
 /*
  * Media queries for responsive design
  */

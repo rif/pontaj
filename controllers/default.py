@@ -10,6 +10,7 @@
 #########################################################################
 from datetime import date, timedelta
 import calendar
+import locale
 
 def _prev_month(intai):
     pe = intai - timedelta(days=1)
@@ -61,6 +62,7 @@ def index():
                 luna=luna,
                 tcs=tcs,
                 c = c,
+                cal = calendar.HTMLCalendar(),
                 nr_zile = calendar.monthrange(an,luna)[1],
                 intai=intai,
                 firma=firma,
@@ -141,6 +143,24 @@ def get_ore_lucrate():
 def get_ore_nelucrate():
     pontaj = db.pontaj(request.args[0])
     return pontaj.total_ore_nelucrate
+
+def _concedii(angajat_id):
+    an_curent = date.today().year
+    pontaje = db((db.pontaj.luna.year()==an_curent) &
+                 (db.pontaj.angajat==angajat_id)).select(db.pontaj.id, db.pontaj.concedii)
+    sum_concedii = [0] * len(pontaje[0].concedii)
+    for p in pontaje:
+        for i in range(len(sum_concedii)):
+            sum_concedii[i] += p.concedii[i]
+    return sum_concedii
+
+def detalii_angajat():
+    if len(request.args): a_id = request.args[0]
+    else: a_id = 1
+    angajat = db.angajat(a_id)
+    concedii = db(db.tip_concediu.id>0).select()
+    sume = _concedii(a_id)
+    return dict(angajat=angajat, concedii=concedii, sume=sume)
 
 
 def user():

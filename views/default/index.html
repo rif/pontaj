@@ -21,11 +21,15 @@
   });
   $("#print").click(function(e){
   $(this).remove();
-  $("#header, #statusbar, #footer").remove();
+  $("#header, #statusbar, #footer", "#calendar").remove();
   $("a").each(function(){
   $(this).replaceWith($(this).text());
   e.preventDefault();
   });
+  });
+  $("#toggle-calendar").click(function(e){
+  $("#calendar-div").fadeToggle();
+  e.preventDefault();
   });
   });
 </script>
@@ -69,7 +73,7 @@
 {{if ord == angajati_pe_pagina: break}}
 <tr>
   <td>{{=ord + 1}}</td>
-  <td>{{=angajat.nume}} {{=angajat.prenume}}</td>
+  <td><a href="{{=URL('detalii_angajat', args=angajat.id)}}">{{=angajat.nume}} {{=angajat.prenume}}</a></td>
   {{pontaj = db.pontaj((db.pontaj.angajat==angajat) & (db.pontaj.luna==intai))}}
   {{for zi in c.itermonthdays2(an, luna):}}
   {{if zi[0] != 0:}}
@@ -87,6 +91,13 @@
 {{pass}}
 </tbody>
 </table>
+<div id="calendar">
+  <a id="toggle-calendar" href="#">Arată/ascunde calendarul</a>
+  <div id="calendar-div">
+    {{=XML(cal.formatmonth(an, luna))}}
+  </div>
+</div>
+
 <div id="page-links">
 {{if page:}}
 <a href="{{=URL(vars=dict(page=[page-1]))}}">&lt;&lt; precedenții</a>
