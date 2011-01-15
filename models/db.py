@@ -87,7 +87,8 @@ class PontajVirtualFields:
         return self.pontaj.nr_zile_lucratoare * self.pontaj.angajat.norma - self.pontaj.total_ore_lucrate
 
 db.define_table('firma',
-                Field('nume', required=True, unique=True)
+                Field('nume', required=True, unique=True),
+                format='%(nume)s'
                 )
 
 db.define_table('angajat',
@@ -110,7 +111,8 @@ db.define_table('pontaj',
 
 db.define_table('tip_concediu',
                 Field('abreviere', required=True, unique=True),
-                Field('nume', required=True, unique=True)
+                Field('nume', required=True, unique=True),
+                format='%(nume)s'
                 )
 
 db.pontaj.virtualfields.append(PontajVirtualFields())
