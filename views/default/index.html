@@ -19,6 +19,14 @@
   oren.load(oren.attr("id"));
   e.preventDefault();
   });
+  $("#print").click(function(e){
+  $(this).remove();
+  $("#header, #statusbar, #footer").remove();
+  $("a").each(function(){
+  $(this).replaceWith($(this).text());
+  e.preventDefault();
+  });
+  });
   });
 </script>
 {{end}}
@@ -29,20 +37,18 @@
     {{pass}}
   </ul>
 </div>
-
+<a id="print" href="#">Print</a>
 <h1 style="text-align:center;">Foaie colectivă de prezență</h1>
 <h3>Unitatea <a id="urmatoarea-firma" href="{{=URL('urmatoarea_firma')}}">{{=firma.nume}}</a></h3>
 <h4 style="text-align:center;">
   <a href="{{=URL('index', args=(inapoi.year, inapoi.month))}}">&lt;&lt;</a> pe luna {{=luna}} {{=an}} <a href="{{=URL('index', args=(inainte.year, inainte.month))}}">&gt;&gt;</a>
 </h4>
-{{import calendar}}
-{{c = calendar.Calendar()}}
 <table id="pontaj-table">
 <thead>
 <tr>
   <th rowspan="2">Nr. crt</th>
   <th rowspan="2">Angajat</th>
-  <th colspan="{{=calendar.monthrange(an,luna)[1]}}">Ore zilnic</th>
+  <th colspan="{{=nr_zile}}">Ore zilnic</th>
   <th rowspan="2">Lucrate</th>
   <th rowspan="2">Nelucrate</th>
   <th colspan="{{=tcs.count()}}">Concedii</th>

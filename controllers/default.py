@@ -54,6 +54,8 @@ def index():
                 an=an,
                 luna=luna,
                 tcs=tcs,
+                c = c,
+                nr_zile = calendar.monthrange(an,luna)[1],
                 intai=intai,
                 firma=firma,
                 inapoi=_prev_month(intai),
