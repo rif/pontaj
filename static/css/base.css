@@ -259,7 +259,7 @@ button {  width: auto; overflow: visible; }
 
 
 /*********** add bottom line to table rows ***********/
-th, td { padding: 0.1em 0.5em 0.1em 0.5em;}
+th, td { padding: 0.1em 0.4em;}
 
 /*********** labels bold and occasionally centered ***********/
 label {
@@ -268,10 +268,15 @@ label {
 label, b, th {
     font-weight: bold;
 }
-thead th {
+thead th, tbody td {
     text-align: center;
-    border-bottom: 1px solid #444;
+    border: 1px solid #444;
 }
+
+thead {
+    border-bottom: 2px solid #444;
+}
+
 /*********** forms and table padding ***********/
 form, table {
    padding: 5px 10px 5px 10px;

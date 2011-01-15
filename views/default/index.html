@@ -30,6 +30,7 @@
   });
 </script>
 {{end}}
+<h1 style="text-align:right; margin-right:50px;"><a id="print" href="#">Print</a></h1>
 <div id="legenda">
   <ul>
     {{for tc in tcs.select():}}
@@ -37,7 +38,6 @@
     {{pass}}
   </ul>
 </div>
-<a id="print" href="#">Print</a>
 <h1 style="text-align:center;">Foaie colectivă de prezență</h1>
 <h3>Unitatea <a id="urmatoarea-firma" href="{{=URL('urmatoarea_firma')}}">{{=firma.nume}}</a></h3>
 <h4 style="text-align:center;">
@@ -49,8 +49,8 @@
   <th rowspan="2">Nr. crt</th>
   <th rowspan="2">Angajat</th>
   <th colspan="{{=nr_zile}}">Ore zilnic</th>
-  <th rowspan="2">Lucrate</th>
-  <th rowspan="2">Nelucrate</th>
+  <th rowspan="2">Total<br>lucrate</th>
+  <th rowspan="2">Total<br>nelucrate</th>
   <th colspan="{{=tcs.count()}}">Concedii</th>
 </tr>
 <tr>
