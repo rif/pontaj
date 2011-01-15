@@ -66,6 +66,7 @@
 </thead>
 <tbody>
 {{for ord, angajat in enumerate(angajati):}}
+{{if ord == angajati_pe_pagina: break}}
 <tr>
   <td>{{=ord + 1}}</td>
   <td>{{=angajat.nume}} {{=angajat.prenume}}</td>
@@ -82,6 +83,16 @@
   <td><a class="concediator" href="{{=URL('concediaza', args=(pontaj.id, cc))}}">{{=co}}</a></td>
   {{pass}}
 </tr>
+{{pass}} <!-- if pagina -->
 {{pass}}
 </tbody>
 </table>
+<div id="page-links">
+{{if page:}}
+<a href="{{=URL(vars=dict(page=[page-1]))}}">&lt;&lt; precedenții</a>
+{{pass}}
+
+{{if len(angajati)>angajati_pe_pagina:}}
+<a href="{{=URL(vars=dict(page=[page+1]))}}">următorii &gt;&gt;</a>
+{{pass}}
+</div>

@@ -418,6 +418,7 @@ th.weekend,td.weekend>a {color: lightgray;}
 a, a:active, a:visited {text-decoration: none;}
 #legenda {float:right;}
 .overit {background: #ffe5e5; border-bottom: 1px dotted red;}
+#page-links {text-align: center;}
 
 /*
  * Media queries for responsive design

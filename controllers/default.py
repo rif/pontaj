@@ -28,8 +28,14 @@ def index():
     else: luna = today.month
     intai = date(an, luna, 1)
 
+    if len(request.vars): page = int(request.vars.page)
+    else: page = 0
+
     tcs = db(db.tip_concediu.id>0)
-    angajati = db((db.angajat.activ==True)&(db.angajat.firma==session.firma_id)).select(orderby=db.angajat.nume|db.angajat.prenume)
+    angajati_pe_pagina = 20
+    limitby = (page*angajati_pe_pagina,(page+1)*angajati_pe_pagina+1)
+    angajati = db((db.angajat.activ==True)&
+                  (db.angajat.firma==session.firma_id)).select(orderby=db.angajat.nume|db.angajat.prenume, limitby=limitby)
     session.firma_id = (session.firma_id or 1)
     firma = db.firma(session.firma_id)
     c = calendar.Calendar()
@@ -58,6 +64,8 @@ def index():
                 nr_zile = calendar.monthrange(an,luna)[1],
                 intai=intai,
                 firma=firma,
+                page = page,
+                angajati_pe_pagina = angajati_pe_pagina,
                 inapoi=_prev_month(intai),
                 inainte=_next_month(intai))
 
