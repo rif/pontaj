@@ -4,8 +4,8 @@
 
 {{=form}}
 
-<ol>
+<ul>
   {{for f in firme:}}
-  <li><a href="{{=URL('firme', args=f.id)}}">{{=f.nume}}</a></li>
+  <li>{{=f.id}}. <a href="{{=URL('firme', args=f.id)}}">{{=f.nume}}</a></li>
   {{pass}}
-</ol>
+</ul>

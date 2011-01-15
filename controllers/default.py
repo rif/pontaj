@@ -83,7 +83,7 @@ def angajati():
     return dict(angajati=angajati, form=form)
 
 def firme():
-    firme = db().select(db.firma.ALL, orderby=db.firma.nume)
+    firme = db().select(db.firma.ALL, orderby=db.firma.id)
     if len(request.args) == 0:
         form = crud.create(db.firma,
                            next=URL(), message="Firma introdusa")
