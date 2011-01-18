@@ -2,92 +2,94 @@
 
 {{block script}}
 <script type="text/javascript">
-  $(function(){
-  $("#pontaj-table>tbody>tr").hover(
-  function () {
-      $(this).addClass("overit");
-  }, 
-  function () {
-      $(this).removeClass("overit");
-  }
-  );
-  $(".pontator, .concediator").click(function(e){
-  $(this).load($(this).attr("href"));
-  orel = $(".total-lucrate", $(this).parent().parent());
-  oren = $(".total-nelucrate", $(this).parent().parent());
-  orel.load(orel.attr("id"));
-  oren.load(oren.attr("id"));
-  e.preventDefault();
-  });
-  });
+    $( function() {
+        $("#pontaj-table>tbody>tr").hover( function () {
+            $(this).addClass("overit");
+        }, function () {
+            $(this).removeClass("overit");
+        }
+        );
+        $(".pontator, .concediator").click( function(e) {
+            $(this).load($(this).attr("href"));
+            orel = $(".total-lucrate", $(this).parent().parent());
+            oren = $(".total-nelucrate", $(this).parent().parent());
+            orel.load(orel.attr("id"));
+            oren.load(oren.attr("id"));
+            e.preventDefault();
+        });
+    });
 </script>
 {{end}}
 <div id="legenda">
-  <ul>
-    {{for tc in tcs.select():}}
-    <li>{{=tc.abreviere}} - {{=tc.nume}}</li>
-    {{pass}}
-  </ul>
+    <ul>
+        {{for tc in tcs.select():}}
+        <li>
+            {{=tc.abreviere}} - {{=tc.nume}}
+        </li>
+        {{pass}}
+    </ul>
 </div>
 <h1 style="text-align:center;">Foaie colectivă de prezență</h1>
 <h3>Unitatea <a id="urmatoarea-firma" href="{{=URL('urmatoarea_firma')}}">{{=firma.nume}}</a></h3>
 <h4 style="text-align:center;">
-  <a href="{{=URL('index', args=(inapoi.year, inapoi.month))}}">&lt;&lt;</a> pe luna {{=luna}} {{=an}} <a href="{{=URL('index', args=(inainte.year, inainte.month))}}">&gt;&gt;</a>
+<a href="{{=URL('index', args=(inapoi.year, inapoi.month))}}">&lt;&lt;</a> pe luna {{=luna}} {{=an}} <a href="{{=URL('index', args=(inainte.year, inainte.month))}}">&gt;&gt;</a>
 </h4>
 <table id="pontaj-table">
-<thead>
-<tr>
-  <th rowspan="2">Nr.<br>crt</th>
-  <th rowspan="2">Angajat</th>
-  <th colspan="{{=nr_zile}}">Ore zilnic</th>
-  <th rowspan="2">Total<br>lucrate</th>
-  <th rowspan="2">Total<br>nelucrate</th>
-  <th colspan="{{=tcs.count()}}">Concedii</th>
-</tr>
-<tr>
-  {{for zi in c.itermonthdays2(an, luna):}}
-  {{if zi[0] != 0:}}
-  <th class="{{if zi[1] in (5,6):}}weekend{{pass}}">{{=zi[0]}}</th>
-  {{pass}}
-  {{pass}}
-  {{for tc in tcs.select():}}
-  <th>{{=tc.abreviere}}</th>
-  {{pass}}
-</tr>
-</thead>
-<tbody>
-{{for ord, angajat in enumerate(angajati):}}
-{{if ord == angajati_pe_pagina: break}}
-<tr>
-  <td>{{=ord + 1}}</td>
-  <td><a href="{{=URL('detalii_angajat', args=angajat.id)}}">{{=angajat.nume}} {{=angajat.prenume}}</a></td>
-  {{pontaj = db.pontaj((db.pontaj.angajat==angajat) & (db.pontaj.luna==intai))}}
-  {{for zi in c.itermonthdays2(an, luna):}}
-  {{if zi[0] != 0:}}
-  {{index = zi[0] - 1}}
-  <td class="{{if zi[1] in (5,6):}}weekend{{pass}}"><a class="pontator" href="{{=URL('ponteaza', args=(pontaj.id, index))}}">{{=pontaj.zile[index]}}</a></td>
-  {{pass}}
-  {{pass}}
-  <td id="{{=URL('get_ore_lucrate', args=pontaj.id)}}" class="total-lucrate">{{=pontaj.total_ore_lucrate}}</td>
-  <td id="{{=URL('get_ore_nelucrate', args=pontaj.id)}}" class="total-nelucrate">{{=pontaj.total_ore_nelucrate}}</td>
-  {{for cc, co in enumerate(pontaj.concedii):}}
-  <td><a class="concediator" href="{{=URL('concediaza', args=(pontaj.id, cc))}}">{{=co}}</a></td>
-  {{pass}}
-</tr>
-{{pass}} <!-- if pagina -->
-{{pass}}
-</tbody>
+    <thead>
+        <tr>
+            <th rowspan="2">Nr.
+            <br>crt</th>
+            <th rowspan="2">Angajat</th>
+            <th colspan="{{=nr_zile}}">Ore zilnic</th>
+            <th rowspan="2">Total
+            <br>lucrate</th>
+            <th rowspan="2">Total
+            <br>nelucrate</th>
+            <th colspan="{{=tcs.count()}}">Concedii</th>
+        </tr>
+        <tr>
+            {{for zi in c.itermonthdays2(an, luna):}}
+            {{if zi[0] != 0:}}
+            <th class="{{if zi[1] in (5,6):}}weekend{{pass}}">{{=zi[0]}}</th>
+            {{pass}}
+            {{pass}}
+            {{for tc in tcs.select():}}
+            <th>{{=tc.abreviere}}</th>
+            {{pass}}
+        </tr>
+    </thead>
+    <tbody>
+        {{for ord, angajat in enumerate(angajati):}}
+        {{if ord == angajati_pe_pagina: break}}
+        <tr>
+            <td>{{=ord + 1}}</td>
+            <td><a href="{{=URL('detalii_angajat', args=angajat.id)}}">{{=angajat.nume}} {{=angajat.prenume}}</a></td>
+            {{pontaj = db.pontaj((db.pontaj.angajat==angajat) & (db.pontaj.luna==intai))}}
+            {{for zi in c.itermonthdays2(an, luna):}}
+            {{if zi[0] != 0:}}
+            {{index = zi[0] - 1}}
+            <td class="{{if zi[1] in (5,6):}}weekend{{pass}}"><a class="pontator" href="{{=URL('ponteaza', args=(pontaj.id, index))}}">{{=pontaj.zile[index]}}</a></td>
+            {{pass}}
+            {{pass}}
+            <td id="{{=URL('get_ore_lucrate', args=pontaj.id)}}" class="total-lucrate">{{=pontaj.total_ore_lucrate}}</td>
+            <td id="{{=URL('get_ore_nelucrate', args=pontaj.id)}}" class="total-nelucrate">{{=pontaj.total_ore_nelucrate}}</td>
+            {{for cc, co in enumerate(pontaj.concedii):}}
+            <td><a class="concediator" href="{{=URL('concediaza', args=(pontaj.id, cc))}}">{{=co}}</a></td>
+            {{pass}}
+        </tr>
+        {{pass}} <!-- if pagina -->
+        {{pass}}
+    </tbody>
 </table>
 <div id="calendar">
     {{=XML(cal.formatmonth(an, luna))}}
 </div>
-
 <div id="page-links">
-{{if page:}}
-<a href="{{=URL(vars=dict(page=[page-1]))}}">&lt;&lt; precedenții</a>
-{{pass}}
+    {{if page:}}
+    <a href="{{=URL(vars=dict(page=[page-1]))}}">&lt;&lt; precedenții</a>
+    {{pass}}
 
-{{if len(angajati)>angajati_pe_pagina:}}
-<a href="{{=URL(vars=dict(page=[page+1]))}}">următorii &gt;&gt;</a>
-{{pass}}
+    {{if len(angajati)>angajati_pe_pagina:}}
+    <a href="{{=URL(vars=dict(page=[page+1]))}}">următorii &gt;&gt;</a>
+    {{pass}}
 </div>

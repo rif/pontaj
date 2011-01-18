@@ -92,7 +92,7 @@ db.define_table('firma',
                 )
 
 db.define_table('angajat',
-                Field('firma', db.firma, requires=[IS_IN_DB(db, 'firma.id', '%(nume)s')]),
+                Field('firma', db.firma),
                 Field('nume', required=True),
                 Field('prenume', required=True),
                 Field('norma', 'integer', required=True, requires=[IS_INT_IN_RANGE(1,10)]),
