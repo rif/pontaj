@@ -26,14 +26,16 @@
                 a.click(function(e){ // re-register clicks
                     pontaj(e, $(this));
                 });
-                a.load(a.attr("href"), {input_val: input.val()}); //send the inputed value to server
-                update_totals(a); 
+                a.load(a.attr("href"), {input_val: input.val()}, function(){
+                    update_totals(a); 
+                }); //send the inputed value to server                
                 return false;
             });
             
         } else {
-            object.load(object.attr("href"));
-            update_totals(object);
+            object.load(object.attr("href"), function(){
+                update_totals(object);
+            });            
         }
         e.preventDefault();
     }
