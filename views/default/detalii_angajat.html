@@ -10,7 +10,7 @@
     {{if sum(sume):}}
     {{for ord, c in enumerate(concedii):}}
     {{if sume[ord]:}}
-    <li><label>{{=c.abreviere + " - " + c.nume}}:</label> {{=sume[ord]}}</li>
+    <li><label>{{=c.abreviere + " - " + c.nume}}:</label> {{="%d ore / %d = %.2f zile" %(sume[ord], angajat.norma, float(sume[ord])/angajat.norma)}}</li>
     {{pass}}
     {{pass}}
     {{else:}}
