@@ -2,6 +2,41 @@
 
 {{block script}}
 <script type="text/javascript">
+    function update_totals(object){
+        orel = $(".total-lucrate", object.parent().parent());
+        oren = $(".total-nelucrate", object.parent().parent());
+        orel.load(orel.attr("id"));
+        oren.load(oren.attr("id"));
+    }
+    
+    function pontaj(e, object){         
+        if(e.ctrlKey) {                 
+            var td = object.parent(); 
+            var oldHtml = td.html();  //remember old a tag              
+            object.replaceWith('<form><input style="width:1.5em" type="text" size="2" maxlength="2" value="' + object.text() + '"></form>');
+            var input = $("input", td);
+            input.focus();
+            var form = $("form", td);
+            input.focusout(function(){ // on focu lost submit              
+                form.submit();  
+            });
+            form.submit(function(){
+                td.html(oldHtml); // put the old a tag back
+                var a = $("a", td);
+                a.click(function(e){ // re-register clicks
+                    pontaj(e, $(this));
+                });
+                a.load(a.attr("href"), {input_val: input.val()}); //send the inputed value to server
+                update_totals(a); 
+                return false;
+            });
+            
+        } else {
+            object.load(object.attr("href"));
+            update_totals(object);
+        }
+        e.preventDefault();
+    }
     $( function() {
         $("#pontaj-table>tbody>tr").hover( function () {
             $(this).addClass("overit");
@@ -10,12 +45,7 @@
         }
         );
         $(".pontator, .concediator").click( function(e) {
-            $(this).load($(this).attr("href"));
-            orel = $(".total-lucrate", $(this).parent().parent());
-            oren = $(".total-nelucrate", $(this).parent().parent());
-            orel.load(orel.attr("id"));
-            oren.load(oren.attr("id"));
-            e.preventDefault();
+            pontaj(e, $(this));         
         });
     });
 </script>
@@ -30,7 +60,9 @@
     </ul>
 </div>
 <h1 style="text-align:center;">Foaie colectivă de prezență</h1>
+{{if firma:}}
 <h3>Unitatea <a id="urmatoarea-firma" href="{{=URL('urmatoarea_firma')}}">{{=firma.nume}}</a></h3>
+{{pass}}
 <h4 style="text-align:center;">
 <a href="{{=URL('index', args=(inapoi.year, inapoi.month))}}">&lt;&lt;</a> pe luna {{=luna}} {{=an}} <a href="{{=URL('index', args=(inainte.year, inainte.month))}}">&gt;&gt;</a>
 </h4>

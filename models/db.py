@@ -76,26 +76,20 @@ crud.settings.auth = None                      # =auth to enforce authorization 
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################.
 
-def calcul_ore_lucrate(row):
-    sum = 0
-    for ore in row.zile:
-        sum += ore
-    return sum
-
 class PontajVirtualFields:
     def total_ore_nelucrate(self):
         return self.pontaj.nr_zile_lucratoare * self.pontaj.angajat.norma - self.pontaj.total_ore_lucrate
 
 db.define_table('firma',
-                Field('nume', required=True, unique=True),
+                Field('nume', length=50, required=True, unique=True),
                 format='%(nume)s'
                 )
 
 db.define_table('angajat',
                 Field('firma', db.firma),
-                Field('nume', required=True),
-                Field('prenume', required=True),
-                Field('norma', 'integer', required=True, requires=[IS_INT_IN_RANGE(1,10)]),
+                Field('nume', length=30, required=True),
+                Field('prenume', length=30, required=True),
+                Field('norma', 'integer', required=True, requires=IS_INT_IN_RANGE(1,10)),
                 Field('activ', 'boolean', default=True),
                 format='%(nume)s %(prenume)s'
                 )
@@ -106,12 +100,12 @@ db.define_table('pontaj',
                 Field('zile', 'list:integer'),
                 Field('concedii', 'list:integer'),
                 Field('nr_zile_lucratoare', 'integer', writable=False, readable=False),
-                Field('total_ore_lucrate', 'integer', compute=calcul_ore_lucrate),
+                Field('total_ore_lucrate', 'integer', compute=lambda row: sum(row.zile)),
                 )
 
 db.define_table('tip_concediu',
-                Field('abreviere', required=True, unique=True),
-                Field('nume', required=True, unique=True),
+                Field('abreviere', length=3, required=True, unique=True),
+                Field('nume', length=30, required=True, unique=True),
                 format='%(nume)s'
                 )
 

@@ -115,10 +115,13 @@ def ponteaza():
     pontaj = db.pontaj(request.args[0])
     index = int(request.args[1])
     lista_zile = pontaj.zile
-    if pontaj.zile[index] > 0:
-        lista_zile[index] -= 1
+    if request.vars.input_val:
+        lista_zile[index] = int(request.vars.input_val)
     else:
-        lista_zile[index] = 12
+        if pontaj.zile[index] > 0:
+            lista_zile[index] -= 1
+        else:
+            lista_zile[index] = 12
     pontaj.update_record(zile=lista_zile)
     return pontaj.zile[index]
     
