@@ -32,12 +32,13 @@ def index():
     if len(request.vars): page = int(request.vars.page)
     else: page = 0
 
+    session.firma_id = (session.firma_id or 1)
+
     tcs = db(db.tip_concediu.id>0)
     angajati_pe_pagina = 20
     limitby = (page*angajati_pe_pagina,(page+1)*angajati_pe_pagina+1)
     angajati = db((db.angajat.activ==True)&
-                  (db.angajat.firma==session.firma_id)).select(orderby=db.angajat.nume|db.angajat.prenume, limitby=limitby)
-    session.firma_id = (session.firma_id or 1)
+                  (db.angajat.firma==session.firma_id)).select(orderby=db.angajat.nume|db.angajat.prenume, limitby=limitby)    
     firma = db.firma(session.firma_id)
     c = calendar.Calendar()
     for a in angajati:
