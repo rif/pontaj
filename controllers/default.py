@@ -132,10 +132,13 @@ def concediaza():
     pontaj = db.pontaj(request.args[0])
     index = int(request.args[1])
     lista_concedii = pontaj.concedii
-    if pontaj.concedii[index] < pontaj.total_ore_nelucrate:
-        lista_concedii[index] += 1
+    if request.vars.input_val:
+        lista_concedii[index] = int(request.vars.input_val)
     else:
-        lista_concedii[index] = 0
+        if pontaj.concedii[index] < pontaj.total_ore_nelucrate:
+            lista_concedii[index] += 1
+        else:
+            lista_concedii[index] = 0
     pontaj.update_record(concedii=lista_concedii)
     return pontaj.concedii[index]
     
