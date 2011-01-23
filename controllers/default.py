@@ -55,7 +55,6 @@ def index():
             db.pontaj.insert(angajat=a, luna=intai,
                              zile=pontaje, concedii=[0]* tcs.count(),
                              nr_zile_lucratoare=zile_lucratoare)
-            db.commit() 
 
     return dict(angajati=angajati,
                 an=an,
