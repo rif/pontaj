@@ -57,12 +57,13 @@ def index():
                              zile=pontaje, concedii=[0]* tcs.count(),
                              nr_zile_lucratoare=zile_lucratoare)
 
+    ro = locale.setlocale(locale.LC_ALL, 'ro_RO')
     return dict(angajati=angajati,
                 an=an,
                 luna=luna,
                 tcs=tcs,
                 c = c,
-                cal = calendar.HTMLCalendar(),
+                cal = calendar.LocaleHTMLCalendar(0,ro),
                 nr_zile = calendar.monthrange(an,luna)[1],
                 intai=intai,
                 firma=firma,
